@@ -1,0 +1,8 @@
+archive/*
+sample-notebooks/*
+*.swp
+vendor/
+TODO.txt
+wip/*
+.DS_Store
+dist/*
