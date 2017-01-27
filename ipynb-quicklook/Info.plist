@@ -54,18 +54,16 @@
 	<key>QLPreviewWidth</key>
 	<real>800</real>
 	<key>QLSupportsConcurrentRequests</key>
-	<false/>
+	<true/>
 	<key>QLThumbnailMinimumSize</key>
 	<real>17</real>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>
-			<key>UTTypeIconFile</key>
-			<string>public.text.icns</string>
 			<key>UTTypeReferenceURL</key>
 			<string>http://jupyter.org/</string>
 			<key>UTTypeDescription</key>
-			<string>Jupyter notebook</string>
+			<string>Jupyter Notebook Document</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.json</string>
