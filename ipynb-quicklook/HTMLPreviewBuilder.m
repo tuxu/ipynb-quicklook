@@ -11,31 +11,30 @@
 @implementation HTMLPreviewBuilder
 
 - (NSString *)previewForNotebookData: (NSData*) data {
-    NSMutableString *html = [[NSMutableString alloc] init];
-    [html appendFormat: @"<!DOCTYPE html>"
-                         "<html><head>"
-                         "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism.min.css'/>"
-                         "<script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js'></script>"
-                         "<script src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/prism.min.js' data-manual></script>"
-                         "<script src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/components/prism-python.min.js' data-manual></script>"
-                         "<script src='cid:nbv.js'></script>"
-                         "<style type='text/css'>"
-                         "body {"
-                         "    font: 0.8em Arial, sans-serif;"
-                         "    background-color: #eee;"
-                         "}"
-                         "</style>"
-                         "<title></title></head>"];
-    [html appendFormat: @"<body>"];
-    [html appendFormat: @"<div id='doc'></div>"];
-    [html appendFormat: @"<script type='application/javascript'>"
-                         "var doc = document.getElementById('doc');"
-                         "var nb = " ];
-    NSString* jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    [html appendString: jsonString];
-    [html appendFormat: @"; nbv.render(nb, doc);"
-                         "</script>"];
-    [html appendFormat: @"</body></html>"];
+    NSError *error;
+    
+    NSBundle *bundle = [NSBundle bundleForClass:[HTMLPreviewBuilder class]];
+    NSURL *templateFile = [bundle URLForResource:@"template" withExtension:@"html"];
+    NSString *template = [[NSString alloc] initWithContentsOfURL:templateFile
+                                                        encoding:NSUTF8StringEncoding
+                                                           error:&error];
+    if (template == nil) {
+        return @"Error loading template";
+    }
+    
+    // Make sure we have valid JSON data
+    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (json == nil) {
+        return @"Invalid JSON data";
+    }
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:0 error:&error];
+    NSString* jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    NSMutableString *html = [[NSMutableString alloc] initWithString:template];
+    [html replaceOccurrencesOfString:@"%notebook-json%"
+                          withString:jsonString
+                             options:NSLiteralSearch
+                               range:NSMakeRange(0, html.length)];
     return html;
 }
 

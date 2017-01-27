@@ -20,7 +20,7 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
         NSData *data = [NSData dataWithContentsOfURL:nsurl];
         
         if (!data) {
-            return noErr;
+            return ioErr;
         }
         
         // Aborted already?
@@ -34,7 +34,11 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
         
         NSBundle *bundle = [NSBundle bundleForClass:[HTMLPreviewBuilder class]];
         NSURL *jsFile = [bundle URLForResource:@"nbv" withExtension:@"js"];
+        
         NSData *jsData = [NSData dataWithContentsOfURL:jsFile];
+        if (!jsData) {
+            return ioErr;
+        }
         
         NSDictionary *properties = @{
                                      (__bridge NSString *)kQLPreviewPropertyTextEncodingNameKey : @"UTF-8",
