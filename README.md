@@ -7,7 +7,8 @@ without further dependencies. Contents are rendered on-the-fly using
 
 ## Getting started
 
-- Download `ipynb-quicklook.qlgenerator` 
+- Download `ipynb-quicklook.qlgenerator`
+  ([Releases](https://github.com/tuxu/ipynb-quicklook/releases))
 - Move the generator into `/Library/QuickLook`. You may need to run `qlmanage
   -r` to reset the Quick Look server and caches.
 - Press <kbd>space</kbd> whenever you encounter a `.ipynb` file. Enjoy 👍
