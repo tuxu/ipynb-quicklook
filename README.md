@@ -1,8 +1,8 @@
 # ipynb-quicklook
 
-A Quick Look generator for
-[Jupyter](https://jupyter.org/)/[IPython](https://ipython.org/) notebooks
-without further dependencies. Contents are rendered on-the-fly using
+A stand-alone [Quick Look](https://en.wikipedia.org/wiki/Quick_Look) generator
+for [Jupyter](https://jupyter.org/)/[IPython](https://ipython.org/) notebooks on
+macOS. Contents are rendered on-the-fly using
 [nbviewer.js](https://github.com/kokes/nbviewer.js).
 
 ## Getting started
