@@ -1,5 +1,8 @@
 # ipynb-quicklook
 
+**Note**: This plugin has now been integrated into a native macOS app,
+[Jupyter Notebook Viewer](https://github.com/tuxu/nbviewer-app).
+
 A stand-alone [Quick Look](https://en.wikipedia.org/wiki/Quick_Look) generator
 for [Jupyter](https://jupyter.org/)/[IPython](https://ipython.org/) notebooks on
 macOS. Contents are rendered on-the-fly using
