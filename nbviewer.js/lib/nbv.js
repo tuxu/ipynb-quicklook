@@ -28,7 +28,7 @@ var nbv = (function() {
         var t = d.createElement('div');
         t.setAttribute('style', [
             'max-width: 960px',
-            'border: 1px solid #ccc',
+            'border: 1px solid #ccc',
             'margin: 1em auto',
             'padding: 1.5em 1.5em 1.5em 7em',
             'background-color: white',
