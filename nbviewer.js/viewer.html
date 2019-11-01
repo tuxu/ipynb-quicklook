@@ -9,6 +9,11 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/prism.min.js' data-manual></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/components/prism-python.min.js' data-manual></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+
+
     <style type='text/css'>
         body {
             font: 0.8em Arial, sans-serif;
@@ -40,6 +45,24 @@
             font-size: 2em;
             margin: 0 auto;
         }
+        button#download-notebook {
+            display: none;
+            margin: 1em auto 0 auto;
+        }
+        input#github-link {
+            font-size: 1em;
+            text-align: center;
+            width: 60%;
+        }
+        input#github-link::placeholder {
+            color: #ccc;
+        }
+        div#serving-info {
+            font-size: 1.2em;
+            font-style: italic;
+            margin-top: 1em;
+            text-align: center;
+        }
     </style>
 
     <!-- nbviewer.js -->
@@ -50,7 +73,13 @@
 
 <div id='doc'>
     <select id='file-selector'></select>
-    <div id='instructions'>Drag and drop Jupyter notebooks anywhere here</div>
+    <button id='download-notebook'>Download this notebook in HTML</button>
+    <div id='instructions'>Drag and drop Jupyter notebooks anywhere here...<br />
+    or paste a link from Github: <br />
+    <input id='github-link' placeholder='https://github.com/...'/>
+    </div>
+
+    <div id='serving-info'></div>
 
 </div>
 
@@ -58,12 +87,30 @@
 <script type='text/javascript'>
     var d = document
     var doc = d.getElementById('doc')
+    var dn = d.getElementById('download-notebook')
+
+    dn.addEventListener('click', function() {
+        var nbs = d.querySelectorAll('div.rendered-notebook')
+        for (var j=0; j<nbs.length; j++) {
+            if (nbs[j].style.display == 'none') continue
+
+            var link = d.createElement('a')
+            var content = encodeURIComponent(nbs[j].innerHTML)
+            var filename = nbs[j].getAttribute('rel').replace('.ipynb', '.html')
+            link.setAttribute('href', 'data:text/plain;charset=utf-8,' + content)
+            link.setAttribute('download', filename)
+
+            d.body.appendChild(link)
+            link.click()
+            d.body.removeChild(link)
+            break
+        }
+    })
 
     var fs = d.getElementById('file-selector')
     fs.addEventListener('change', function() {
-        var nbs = doc.childNodes
+        var nbs = d.querySelectorAll('div.rendered-notebook')
         for (var j=0; j<nbs.length; j++) {
-            if (nbs[j].nodeName != 'DIV') continue
             if (nbs[j].getAttribute('rel') == fs.value) {
                 nbs[j].style.display = 'block'
                 continue
@@ -115,6 +162,7 @@
     function renderFiles(fns) {
         d.getElementById('instructions').style.display = 'none'
         fs.style.display = 'block'
+        dn.style.display = 'block'
 
         for (var j=0; j<fns.length; j++) {
             var fn = fns[j]
@@ -135,6 +183,7 @@
                     var tg = doc.querySelector('div[rel="' + fn.name + '"]')
                     if (tg === null) {
                         tg = d.createElement('div')
+                        tg.setAttribute('class', 'rendered-notebook')
                         tg.setAttribute('rel', fn.name)
                         doc.appendChild(tg)
                     }
@@ -159,6 +208,69 @@
 
             rd.readAsText(fn)
         }
+    }
+
+    // github rendering shenanigans
+    var ghl = document.getElementById('github-link')
+
+    ghl.addEventListener('keyup', (x) => {
+        // TODO: verify the link via regexp or something
+        // and change the input's css accordingly (red border)
+        window.location.hash = btoa(ghl.value);
+        render_gh_files()
+    })
+
+    // what if we loaded a site with a hash already
+    if (window.location.hash.length > 1) {
+        ghl.value = atob(window.location.hash.slice(1))
+        var event = new CustomEvent('keyup')
+        ghl.dispatchEvent(event)
+    }
+
+    // `atob` won't decode utf8 characters correctly, we need to do more about this
+    // taken from this excellent answer https://stackoverflow.com/a/30106551
+    function b64DecodeUnicode(str) {
+        return decodeURIComponent(atob(str).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    }
+
+    async function render_gh_files() {
+        console.log('rendering')
+        var hs = window.location.hash.slice(1); // without '#'
+        var hsurl = atob(hs); // base64 -> text
+
+        // extract relevant bits from the URL and create a URL for the Github API
+        var ghparts = new RegExp(/https:\/\/github.com\/(.+?)\/(.+?)\/blob\/(.+?)\/(.+\.ipynb)/)
+        var m = hsurl.match(ghparts)
+        if (!m) {
+            // TODO: render some place
+            console.error('invalid URL ' + hsurl)
+            return
+        }
+
+        var api_url = `https://api.github.com/repos/${m[1]}/${m[2]}/contents/${m[4]}?ref=${m[3]}`
+        var filename = m[4].split('/').pop()
+        console.log(`translated ${hsurl} into ${api_url}, fetching`)
+
+        var dd = await fetch(api_url) // TODO: this could fail on API limits
+        var ddj = await dd.json()
+        var dt = JSON.parse(b64DecodeUnicode(ddj.content)) // decode incoming data
+        gg = dt;
+
+        d.getElementById('instructions').style.display = 'none'
+
+        tg = d.createElement('div')
+        tg.setAttribute('class', 'rendered-notebook')
+        tg.setAttribute('rel', hsurl)
+        doc.appendChild(tg)
+
+        nbv.render(dt, tg)
+
+        document.getElementById('download-notebook').style.display = 'block'
+
+        document.getElementById('serving-info').innerHTML = `Serving <code>${decodeURI(filename)}</code>. <a href='${window.location}'>Permanent link to this render</a> / <a href='${hsurl}'>original Github source</a>, <a href='${api_url}'>API source data</a>`;
+        // return;
     }
 
 </script>
