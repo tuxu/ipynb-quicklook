@@ -7,17 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		215B224E1E3B4FB40055B563 /* template.html in Resources */ = {isa = PBXBuildFile; fileRef = 215B224D1E3B4FB40055B563 /* template.html */; };
 		219F67471E37F49800CA4392 /* GenerateThumbnailForURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 219F67461E37F49800CA4392 /* GenerateThumbnailForURL.m */; };
 		219F67491E37F49800CA4392 /* GeneratePreviewForURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 219F67481E37F49800CA4392 /* GeneratePreviewForURL.m */; };
 		219F674B1E37F49800CA4392 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 219F674A1E37F49800CA4392 /* main.c */; };
 		219F67541E3AC7E100CA4392 /* HTMLPreviewBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 219F67521E3AC7E100CA4392 /* HTMLPreviewBuilder.h */; };
 		219F67551E3AC7E100CA4392 /* HTMLPreviewBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 219F67531E3AC7E100CA4392 /* HTMLPreviewBuilder.m */; };
-		219F67571E3AD15900CA4392 /* nbv.js in Resources */ = {isa = PBXBuildFile; fileRef = 219F67561E3AD15900CA4392 /* nbv.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		215B224D1E3B4FB40055B563 /* template.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = template.html; sourceTree = "<group>"; };
 		219F67431E37F49800CA4392 /* ipynb-quicklook.qlgenerator */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ipynb-quicklook.qlgenerator"; sourceTree = BUILT_PRODUCTS_DIR; };
 		219F67461E37F49800CA4392 /* GenerateThumbnailForURL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GenerateThumbnailForURL.m; sourceTree = "<group>"; };
 		219F67481E37F49800CA4392 /* GeneratePreviewForURL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeneratePreviewForURL.m; sourceTree = "<group>"; };
@@ -25,7 +22,7 @@
 		219F674C1E37F49800CA4392 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		219F67521E3AC7E100CA4392 /* HTMLPreviewBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLPreviewBuilder.h; sourceTree = "<group>"; };
 		219F67531E3AC7E100CA4392 /* HTMLPreviewBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLPreviewBuilder.m; sourceTree = "<group>"; wrapsLines = 1; };
-		219F67561E3AD15900CA4392 /* nbv.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = nbv.js; path = nbviewer.js/lib/nbv.js; sourceTree = SOURCE_ROOT; };
+		40DA4F1927FF9B5100890202 /* template.html.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = template.html.in; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,14 +55,13 @@
 		219F67451E37F49800CA4392 /* ipynb-quicklook */ = {
 			isa = PBXGroup;
 			children = (
-				215B224D1E3B4FB40055B563 /* template.html */,
+				40DA4F1927FF9B5100890202 /* template.html.in */,
 				219F67461E37F49800CA4392 /* GenerateThumbnailForURL.m */,
 				219F67521E3AC7E100CA4392 /* HTMLPreviewBuilder.h */,
 				219F67531E3AC7E100CA4392 /* HTMLPreviewBuilder.m */,
 				219F67481E37F49800CA4392 /* GeneratePreviewForURL.m */,
 				219F674A1E37F49800CA4392 /* main.c */,
 				219F674C1E37F49800CA4392 /* Info.plist */,
-				219F67561E3AD15900CA4392 /* nbv.js */,
 			);
 			path = "ipynb-quicklook";
 			sourceTree = "<group>";
@@ -92,6 +88,7 @@
 				219F673F1E37F49800CA4392 /* Frameworks */,
 				219F67401E37F49800CA4392 /* Headers */,
 				219F67411E37F49800CA4392 /* Resources */,
+				40DA4F1827FF9AC600890202 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -122,6 +119,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 219F67391E37F49800CA4392;
@@ -139,12 +137,32 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				215B224E1E3B4FB40055B563 /* template.html in Resources */,
-				219F67571E3AD15900CA4392 /* nbv.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		40DA4F1827FF9AC600890202 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/ipynb-quicklook/template.html.in",
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# needs: npm install -g inliner\nexport PATH=/opt/homebrew/bin:$PATH\necho \"Inlining JS + CSS dependencies ...\"\nset -ex\noutput_dir=\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\nmkdir -p $output_dir\noutput=\"$output_dir/template.html\"\ninliner -V\ncp \"$SRCROOT/nbviewer.js/lib/nbv.js\" \"$(dirname \"$SCRIPT_INPUT_FILE_0\")/\"\ncmdline=\"inliner -m \\\"$SCRIPT_INPUT_FILE_0\\\" > \\\"$output\\\"\"\nscript -q -t0 /dev/null sh -c \"$cmdline\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		219F673E1E37F49800CA4392 /* Sources */ = {
@@ -270,7 +288,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "ipynb-quicklook/Info.plist";
 				INSTALL_PATH = /Library/QuickLook;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tinowagner.ipynb-quicklook";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = qlgenerator;
@@ -283,7 +301,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "ipynb-quicklook/Info.plist";
 				INSTALL_PATH = /Library/QuickLook;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tinowagner.ipynb-quicklook";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = qlgenerator;
