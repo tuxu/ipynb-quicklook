@@ -32,29 +32,10 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
         HTMLPreviewBuilder *builder = [[HTMLPreviewBuilder alloc] init];
         NSString *html = [builder previewForNotebookData: data];
         
-        NSBundle *bundle = [NSBundle bundleForClass:[HTMLPreviewBuilder class]];
-        NSURL *jsFile = [bundle URLForResource:@"nbv" withExtension:@"js"];
-        
-        NSData *jsData = [NSData dataWithContentsOfURL:jsFile];
-        if (!jsData) {
-            return ioErr;
-        }
-        
-        NSDictionary *properties = @{
-                                     (__bridge NSString *)kQLPreviewPropertyTextEncodingNameKey : @"UTF-8",
-                                     (__bridge NSString *)kQLPreviewPropertyMIMETypeKey : @"text/html",
-                                     (__bridge NSString *)kQLPreviewPropertyAttachmentsKey : @{
-                                             @"nbv.js" : @{
-                                                     (__bridge NSString *)kQLPreviewPropertyMIMETypeKey : @"application/javascript",
-                                                     (__bridge NSString *)kQLPreviewPropertyAttachmentDataKey: jsData,
-                                                     },
-                                             },
-                                     };
-        
         QLPreviewRequestSetDataRepresentation(preview,
                                               (__bridge CFDataRef)[html dataUsingEncoding:NSUTF8StringEncoding],
                                               kUTTypeHTML,
-                                              (__bridge CFDictionaryRef)properties);
+                                              NULL);
     }
     return noErr;
 }
